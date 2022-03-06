@@ -1,16 +1,19 @@
 import gsap from "gsap";
 const images = {};
 
+const imgContainer = document.querySelector(".image");
+const lineContainer = document.querySelector(".photos-lines");
+const forward = document.querySelector(".forward");
+const backward = document.querySelector(".backward");
+
 function importAll(r) {
   r.keys().map((key) => {
     images[key] = r(key);
+    createImgLine();
   });
 }
 importAll(require.context("/src/img", false, /\.jpg$/));
 console.log(images[Object.keys(images)[0]]["default"]);
-
-const imgContainer = document.querySelector(".image");
-const lineContainer = document.querySelector(".photos-lines");
 
 imgContainer.src = images[Object.keys(images)[0]]["default"];
 
@@ -44,8 +47,23 @@ function createImgLine() {
   });
   lineContainer.appendChild(line);
 }
-createImgLine();
-createImgLine();
-createImgLine();
-createImgLine();
+
 lineContainer.children[0].classList.add("active");
+
+forward.addEventListener("click", function () {
+  const activeLine = document.querySelector(".active");
+  if (activeLine.nextSibling) {
+    activeLine.nextSibling.click();
+  } else {
+    lineContainer.firstChild.click();
+  }
+});
+
+backward.addEventListener("click", function () {
+  const activeLine = document.querySelector(".active");
+  if (activeLine.previousSibling) {
+    activeLine.previousSibling.click();
+  } else {
+    lineContainer.lastChild.click();
+  }
+});
